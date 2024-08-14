@@ -1,23 +1,22 @@
-FROM golang:1.22.4 as builder
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
+FROM golang:1.22.4-alpine as builder
+WORKDIR /bank
+
 COPY . .
 
-#RUN GOARCH=amd64 CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/*
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .
+RUN go mod download
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
+RUN GOARCH=arm64 CGO_ENABLED=0 GOOS=linux go build -o app ./cmd/*
+RUN chmod +x app
 
-RUN apk add tzdata
-RUN cp /usr/share/zoneinfo/Europe/Istanbul /etc/localtime
-RUN echo "Europe/Istanbul" > /etc/timezone
-RUN apk del tzdata
+FROM scratch as runner
 
-WORKDIR /root/
-COPY ./.env.example ./.env
+COPY --from=builder /bank/app .
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
 
-COPY --from=builder /app/cmd/server .
 EXPOSE 3000
-CMD ["./cmd/server"]
+
+USER nobody:nogroup
+
+CMD ["/app"]

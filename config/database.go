@@ -7,7 +7,7 @@ import (
 )
 
 type IMysqlInstance interface {
-	Database() (*gorm.DB, error)
+	Database() *gorm.DB
 }
 
 type mysqlInstance struct {
@@ -16,7 +16,7 @@ type mysqlInstance struct {
 
 type MysqlConfig struct {
 	Host     string
-	Port     int
+	Port     string
 	User     string
 	Password string
 	Database string
@@ -32,6 +32,8 @@ func ConnectMysql(cfg MysqlConfig) (IMysqlInstance, error) {
 		cfg.Database,
 	)
 
+	fmt.Println(dsn)
+
 	Database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -43,6 +45,6 @@ func ConnectMysql(cfg MysqlConfig) (IMysqlInstance, error) {
 	return &mysqlInstance{db: Database}, nil
 }
 
-func (m *mysqlInstance) Database() (*gorm.DB, error) {
-	return m.db, nil
+func (m *mysqlInstance) Database() *gorm.DB {
+	return m.db
 }
