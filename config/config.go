@@ -4,7 +4,6 @@ type Config struct {
 	Server  ServerConfig
 	Service ServiceConfig
 	DB      DBConfig
-	Log     LogConfig
 }
 
 type ServerConfig struct {
@@ -13,6 +12,9 @@ type ServerConfig struct {
 }
 
 type ServiceConfig struct {
+	TransferFee        float64 `envconfig:"TRANSFER_FEE"`
+	TransferFeeEnabled bool    `envconfig:"TRANSFER_FEE_ENABLED"`
+	SMSInfoEnabled     bool    `envconfig:"SMS_INFO_ENABLED"`
 }
 
 type DBConfig struct {
@@ -21,7 +23,4 @@ type DBConfig struct {
 	User     string `envconfig:"DB_USER"`
 	Password string `envconfig:"DB_PASSWORD"`
 	Database string `envconfig:"DB_DATABASE"`
-}
-
-type LogConfig struct {
 }

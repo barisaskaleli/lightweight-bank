@@ -12,19 +12,15 @@ type User struct {
 	Balance       float64 `gorm:"type:decimal(10,2)"`
 }
 
-type Permission struct {
-	ID         uint32 `gorm:"primary_key"`
-	UserID     uint32
-	Permission string
-}
-
 type Transaction struct {
-	ID        uint32    `gorm:"primary_key"`
-	Sender    uint32    `gorm:"index"`
-	Receiver  uint32    `gorm:"index"`
-	Amount    float64   `gorm:"type:decimal(10,2)"`
-	Fee       float64   `gorm:"type:decimal(10,2)"`
-	Type      string    `gorm:"type:enum('deposit', 'withdraw', 'transfer')"`
-	CreatedAt time.Time `gorm:"autoCreateTime"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime"`
+	ID         uint32    `gorm:"primary_key"`
+	SenderID   uint32    `gorm:"index"`
+	Sender     User      `gorm:"foreignKey:SenderID;references:ID"`
+	ReceiverID uint32    `gorm:"index"`
+	Receiver   User      `gorm:"foreignKey:ReceiverID;references:ID"`
+	Amount     float64   `gorm:"type:decimal(10,2)"`
+	Fee        float64   `gorm:"type:decimal(10,2)"`
+	Type       string    `gorm:"type:enum('deposit', 'withdraw', 'transfer')"`
+	CreatedAt  time.Time `gorm:"autoCreateTime"`
+	UpdatedAt  time.Time `gorm:"autoUpdateTime"`
 }

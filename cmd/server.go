@@ -38,7 +38,7 @@ func main() {
 	}
 
 	if !mysqlInstance.Database().Migrator().HasTable(&resource.User{}) {
-		err = mysqlInstance.Database().AutoMigrate(&resource.User{}, &resource.Permission{}, &resource.Transaction{})
+		err = mysqlInstance.Database().AutoMigrate(&resource.User{}, &resource.Transaction{})
 		if err != nil {
 			sugar.Errorf("Error while migrating: %v", err)
 			return

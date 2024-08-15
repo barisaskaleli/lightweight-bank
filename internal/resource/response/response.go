@@ -12,3 +12,11 @@ type RegisterResponse struct {
 type LoginResponse struct {
 	Token string `json:"token"`
 }
+
+type TransferResponse struct {
+	Status          bool     `json:"status"`
+	Message         string   `json:"message"`
+	SenderBalance   *float64 `json:"sender_balance,omitempty"`
+	ReceiverBalance *float64 `json:"receiver_balance,omitempty"`
+	Fee             float64  `json:"fee,omitempty"`
+}

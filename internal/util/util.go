@@ -1,6 +1,7 @@
 package util
 
 import (
+	"crypto/md5"
 	"errors"
 	"fmt"
 	"github.com/go-playground/validator/v10"
@@ -25,4 +26,10 @@ func FormatValidationErrors(err error) map[string]string {
 	}
 
 	return errorArr
+}
+
+func MD5Hash(text string) string {
+	hash := md5.New()
+	hash.Write([]byte(text))
+	return fmt.Sprintf("%x", hash.Sum(nil))
 }

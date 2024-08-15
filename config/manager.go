@@ -9,7 +9,6 @@ type IConfig interface {
 	Server() ServerConfig
 	Service() ServiceConfig
 	DB() DBConfig
-	Log() LogConfig
 }
 
 var GlobalConfig IConfig
@@ -38,8 +37,4 @@ func (c *config) Service() ServiceConfig {
 
 func (c *config) DB() DBConfig {
 	return c.cfg.DB
-}
-
-func (c *config) Log() LogConfig {
-	return c.cfg.Log
 }
